@@ -21,23 +21,57 @@
 			<label>Email:</label>
 			<input type="email" name="email">
 			
-			<button>Save&#128190;</button>
+			<button name="save">Save&#128190;</button>
+			<button name="update">Update&#9998;</button>
+			
 		</form>
-	</main>
-</body>
-</html>
 
 <?php 
-$name="";
+if (!$_SESSION['client']) {
+	$client = [
+	0 =>[
+		"name" => "Eliabe",
+		"phone" => 123,
+		"email" => "e@gmail.com",
+		]
+	];
+    
+    $_SESSION['client'] = $client;
+}
+
+$name='';
 $phone=0;
 $email=0;
 
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-	$name= $_POST["name"];
-	$phone= $_POST["phone"];
-	$email= $_POST["email"];
+if ($_SERVER['REQUEST_METHOD'] == "POST"){
+	
+	$name = $_POST['name'];
+	$phone = $_POST['phone'];
+	$email = $_POST['email'];
+	
+	array_push($_SESSION['client'], 
+		[
+		"name" => $name,
+		"phone" => $phone,
+		"email" => $email,
+		]
+	);
 
-	echo "<h3>" . $name . "</h3>"; 
-	echo "<h3>" . $phone . "</h3>";
-	echo "<h3>" . $email . "</h3>";
+	foreach ($_SESSION['client'] as $key) {
+	echo $key . "<br>" . "<br>";
+		foreach ($key as $value) {
+			echo $value;
+			echo "<br>";
+		}
+		echo "<button name='delete'>Delete🗑</button>";
+	}
 }
+
+if ($_POST['delete']) {
+	$name = $_POST["name"];
+	$phone = $_POST["phone"];
+	$email = $_POST["email"];
+	$key = 0;
+	array_splice($_SESSION["client"], $key, 1);
+}
+?>
